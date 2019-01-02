@@ -1,10 +1,35 @@
 import React, { Component } from 'react';
 import './App.css';
 
+const MyContext = React.createContext()
+
+class MyProvider extends Component {
+
+  state = {
+    name: "george",
+    age: 44,
+    cool: true
+  }
+  render() {
+    return(
+      <MyContext.Provider value={
+        {
+          state: this.state,
+          growAYearOlder: () => this.setState({
+            age: this.state.age+1
+          })
+        }
+      }>
+        {this.props.children}
+      </MyContext.Provider>
+    )
+  }
+}
+
 class Family extends Component {
   render() {
     return (
-        <Person name={this.props.name} />
+        <Person />
       )
   }
 }
@@ -12,22 +37,31 @@ class Family extends Component {
 class Person extends Component {
   render() {
     return (
-        <h1>hello {this.props.name}</h1>
+        <div>
+          <MyContext.Consumer>
+            {(context) => (
+              <div>
+                <p>name: {context.state.name}</p>
+                <p>age: {context.state.age}</p>
+                <p>cool? { context.state.cool ? 'yep' : 'nope' }</p>
+                <button onClick={context.growAYearOlder}>Grow Older</button>
+              </div>
+            )}
+          </MyContext.Consumer>
+        </div>
       )
   }
 }
 
 class App extends Component {
-  state = {
-    name: "george",
-    age: 44,
-    cool: true
-  }
+
   render() {
     return (
-      <div className="App">
-         <Family name={this.state.name} />
-      </div>
+      <MyProvider>
+        <div className="App">
+           <Family />
+        </div>
+      </MyProvider>
     );
   }
 }
