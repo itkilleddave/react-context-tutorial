@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 class Family extends Component {
@@ -19,10 +18,15 @@ class Person extends Component {
 }
 
 class App extends Component {
+  state = {
+    name: "george",
+    age: 44,
+    cool: true
+  }
   render() {
     return (
       <div className="App">
-         <Family name="george" />
+         <Family name={this.state.name} />
       </div>
     );
   }
